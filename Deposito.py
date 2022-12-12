@@ -9,7 +9,7 @@ class Deposito:
     def main(self):
         while True:
             print(" ~ DEPÓSITO DE CONSTRUÇÃO ~")
-            print("1 - Atendimento ao Cliente \n2 - Produtos \n0 - Sair")
+            print("1 - Atendimento ao Cliente \n2 - Produtos \n3 - Setor de Vendas \n0 - Sair")
             self.option = int(input("Selecione uma opção:"))
 
             if self.option == 0:
@@ -18,7 +18,9 @@ class Deposito:
             elif self.option == 1:
                 self.viewClientOptions()
             elif self.option == 2:
-                self.viewProductsOptions()
+                self.viewProductsOptions() 
+            elif self.option == 3:
+                self.viewSaleOptions()
     
     #menu dos clientes        
     def viewClientOptions(self):
@@ -30,7 +32,7 @@ class Deposito:
 
             if self.option == 0:
                 print("")
-                break
+                self.main()
 
             elif self.option == 1:
                 handler.add_clients(int(input("\nDigite o ID do novo cliente:")), input("\nDigite o nome do cliente:"), int(input("\nDigite os números do CPF:")))
@@ -59,7 +61,7 @@ class Deposito:
                 break
 
             elif self.option == 1:
-                handler.add_products(int(input("\nDigite o ID do novo produto:")), input("\nDigite o nome do produto:"), int(input("\nDigite a quantidade de produtos:")), float(input("\nDigite o preço do produto:")), input("\nDigite o nome do fornecedor (se for a própria loja, digite 'Loja'):"))
+                handler.add_products(int(input("\nDigite o ID do novo produto:")), input("\nDigite o nome do produto:"), int(input("\nDigite a quantidade de produtos:")), float(input("\nDigite o preço de compra do produto:")), float(input("\nDigite o preço de venda do produto:")), input("\nDigite o nome do fornecedor (se for a própria loja, digite 'Loja'):"))
             
             elif self.option == 2:
                 handler.show_products()
@@ -76,5 +78,28 @@ class Deposito:
             elif self.option == 6:
                 handler.add_mock_products()   
 
+    #menu de vendas
+    def viewSaleOptions(self):
+        handler = Handler()
+        while True:
+            print("\n ~ Setor de Vendas ~")
+            print("1 - Vender Produto \n2 - Exibir relatório de todos os itens vendidos \n3 - Caixa \n0 - Sair")
+            self.option = int(input("Selecione uma opção:"))
+
+            if self.option == 0:
+                break
+
+            elif self.option == 1:
+                handler.sale(int(input("\nDigite o cpf do cliente que irá realizar a compra:")), int(input("\nDigite o ID do produto que deseja vender:")), int(input("\nDigite a quantidade de produtos:")))
+
+            elif self.option == 2:
+                handler.show_sale()
+            
+            elif self.option == 3:
+                handler.show_cashier() 
+
+            elif self.option == 4:
+                handler.show_products()
+  
 m = Deposito()
 m.main()
