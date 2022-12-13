@@ -1,19 +1,23 @@
 from Client import Client
 from Product import Product
 from Sale import Sale
+from collections import defaultdict
 import random 
 
 class Handler:
     clientsList = []
     productsList = []
     saleList = []
+    bestSellerList = []
+    bestProviderList = []
     money_spent = 0.0
     money_earned = 0.0
+    cashier = 0.0
     aux = None
 
     #adcionar mock clientes
     def add_mock_clients(self):
-        self.clientsList.append(Client(random.randint(11,999), "Cliente", 11111111111))
+        self.clientsList.append(Client(random.randint(11,999), "Guilherme B.", 123))
         print("\nMock de Clientes adcionado com sucesso!")
 
     #adcionar novos clientes
@@ -55,8 +59,8 @@ class Handler:
            
     #adcionar mock produtos
     def add_mock_products(self):
-        self.productsList.append(Product(random.randint(11,999), "Produto", 10, 20.0, 50.0, "Loja"))
-        self.productsList.append(Product(random.randint(11,999), "Produto", 10, 20.0, 50.0, "Fornecedor"))
+        self.productsList.append(Product(1, "C", 10, 20.0, 50.0, "Loja"))
+        self.productsList.append(Product(2, "Python", 10, 20.0, 50.0, "Fornecedor"))
         print("\nMock de Produtos adcionado com sucesso!")
 
     #adcionar novos produtos
@@ -111,7 +115,7 @@ class Handler:
     def sale(self, cpf, id, qtd):
         for j in self.clientsList:
             if cpf == j.cpf:
-                client = self.clientsList[self.productsList.index(i)]
+                client = self.clientsList[self.clientsList.index(j)]
                 for i in self.productsList:
                     if id == i.id and qtd <= i.qtd:
                         self.aux = self.productsList.index(i)
@@ -123,6 +127,9 @@ class Handler:
                     if option in "sS":
                         product.qtd = product.qtd - qtd
                         self.saleList.append(Sale(product.id, product.name, qtd, product.price_sell, total_sell, product.provider, product.price_buy, total_buy, client.cpf))
+                        for item in range(qtd):
+                            self.bestSellerList.append(product.id)
+                            self.bestProviderList.append(product.provider)
                         print("Compra realizada!\n") 
                     else:
                         print("Compra cancelada!\n") 
@@ -132,11 +139,13 @@ class Handler:
             else:
                 print("Esse cliente não está cadastrado em nosso sistema, confira a nossa lista!\n")
 
+    #exibir vendas
     def show_sale(self):
         print("\n ~~ Relatórios de Vendas ~~")
         for i in self.saleList:
             print(f"Id:{i.id} Nome:{i.name} Quantidade:{i.qtd} Preço de Venda:R${i.price_sell} Total da Venda:R${i.total_sell} Cliente:{i.cpf} Fornecedor:{i.provider}")
 
+    #exibir caixa
     def show_cashier(self):
         print("\n ~~ Caixa da Empresa ~~")
         for i in self.saleList:
@@ -145,6 +154,42 @@ class Handler:
             self.money_earned = self.money_earned + product.total_sell
             self.cashier = self.money_earned - self.money_spent
         print(f"Total adquirido: R${self.money_earned} Total gasto: R${self.money_spent} Caixa atual: R${self.cashier} ")
+        option = input("\nDeseja criar um arquivo externo com as informações do Caixa? ")
+        if option in "sS":
+            arquivo = open("Caixa.txt", "wt")
+            if arquivo:
+                print("\nArquivo externo foi criado com sucesso!")
+                arquivo.write(f"Total adquirido: R${self.money_earned} Total gasto: R${self.money_spent} Caixa atual: R${self.cashier} ")
+            else:
+                print("Não foi possível criar o arquivo, tente novamente em breve!\n")
+            arquivo.close()
+        
+    #produto mais vendido
+    def best_product(self):
+        print("\n ~~ Produto mais vendido ~~")
+        max = 0
+        keys = defaultdict(list)
+        for key, value in enumerate(self.bestSellerList):
+            keys[value].append(key)
+        for value in keys:
+            if len(keys[value]) > max:
+                max = len(keys[value]) 
+                for i in self.saleList:
+                    if value == i.id:
+                        name = i.name
+        print(f"O produto mais vendido foi: {name}, com um total de {max} vendas!")
 
-    
-    
+    #fornecedor mais escolhido
+    def best_provider(self):
+        print("\n ~~ Fornecedor mais escolhido ~~")
+        max = 0
+        keys = defaultdict(list)
+        for key, value in enumerate(self.bestProviderList):
+            keys[value].append(key)
+        for value in keys:
+            if len(keys[value]) > max:
+                max = len(keys[value]) 
+                for i in self.saleList:
+                    if value == i.provider:
+                        name = i.provider
+        print(f"O fornecedor mais escolhido foi: {name}, com um total de {max} vendas feitas através dele!")

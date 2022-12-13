@@ -83,7 +83,7 @@ class Deposito:
         handler = Handler()
         while True:
             print("\n ~ Setor de Vendas ~")
-            print("1 - Vender Produto \n2 - Exibir relatório de todos os itens vendidos \n3 - Caixa \n0 - Sair")
+            print("1 - Vender Produto \n2 - Exibir relatório de todos os itens vendidos \n3 - Caixa \n4 - Produto mais vendido \n5 - Fornecedor mais escolhido \n0 - Sair")
             self.option = int(input("Selecione uma opção:"))
 
             if self.option == 0:
@@ -99,7 +99,10 @@ class Deposito:
                 handler.show_cashier() 
 
             elif self.option == 4:
-                handler.show_products()
+                handler.best_product()
+
+            elif self.option == 5:
+                handler.best_provider()
   
 m = Deposito()
 m.main()
