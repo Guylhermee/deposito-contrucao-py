@@ -59,8 +59,8 @@ class Handler:
            
     #adcionar mock produtos
     def add_mock_products(self):
-        self.productsList.append(Product(1, "C", 10, 20.0, 50.0, "Loja"))
-        self.productsList.append(Product(2, "Python", 10, 20.0, 50.0, "Fornecedor"))
+        self.productsList.append(Product(random.randint(11,999), "C", 10, 20.0, 50.0, "Loja"))
+        self.productsList.append(Product(random.randint(11,999), "Python", 10, 20.0, 50.0, "Fornecedor"))
         print("\nMock de Produtos adcionado com sucesso!")
 
     #adcionar novos produtos
